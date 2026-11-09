@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عيد ميلاد سعيد يا دينا ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Reem+Kufi&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #fff0f5;
+            color: #4a3b4c;
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,182,193,0.3) 0%, rgba(255,255,255,0.8) 100%);
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid #e8c5d0;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(219, 112, 147, 0.15);
+        }
+
+        .page.active {
+            display: block !important;
+            opacity: 1 !important;
+        }
+
+        h1, h2 {
+            font-family: 'Reem Kufi', sans-serif;
+            color: #b76e79;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #5c4b5c;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ffb6c1, #db7093);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            box-shadow: 0 5px 15px rgba(219, 112, 147, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px;
+            display: inline-block;
+            user-select: none;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 4px 10px rgba(219, 112, 147, 0.4);
+        }
+
+        .btn-disabled {
+            background: #e0d0d5;
+            color: #887a7f;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* الظرف والرسالة */
+        .envelope-container {
+            cursor: pointer;
+            margin: 30px auto;
+            width: 220px;
+            height: 140px;
+            background: #e8a5b5;
+            position: relative;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .envelope-container:active {
+            transform: scale(0.98);
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 110px solid transparent;
+            border-right: 110px solid transparent;
+            border-top: 80px solid #db7093;
+            transform-origin: top;
+            transition: transform 0.6s;
+        }
+        .envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .letter-content {
+            font-family: 'Amiri', serif;
+            font-size: 1.15rem;
+            text-align: right;
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fffdf9;
+            border: 1px dashed #d4af37;
+            border-radius: 12px;
+            display: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.03);
+            line-height: 2;
+        }
+
+        /* معرض الصور */
+        .gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .photo-card {
+            background: white;
+            padding: 10px 10px 25px 10px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transform: rotate(-1.5deg);
+            width: 90%;
+            max-width: 280px;
+        }
+        .photo-card:nth-child(even) {
+            transform: rotate(1.5deg);
+        }
+        .photo-card img {
+            width: 100%;
+            border-radius: 5px;
+            height: 210px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* الكيكة والشموع */
+        .cake-box {
+            position: relative;
+            width: 180px;
+            height: 140px;
+            background: #ffc0cb;
+            margin: 40px auto 20px auto;
+            border-radius: 15px 15px 5px 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .cake-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 35px;
+            background: #fff;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .candle {
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 45px;
+            background: linear-gradient(to right, #c0c0c0, #fff, #c0c0c0);
+            border-radius: 3px;
+        }
+        .flame {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 24px;
+            background: radial-gradient(circle, #ffeb3b 0%, #ff9800 60%, #f44336 100%);
+            border-radius: 50% 50% 20% 20%;
+            animation: flicker 0.6s infinite alternate;
+            box-shadow: 0 0 15px #ff9800;
+        }
+        .flame.off {
+            display: none !important;
+        }
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 1; }
+            100% { transform: translateX(-50%) scale(1.1); opacity: 0.85; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- مشغل الموسيقى للخلفية -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="background-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+
+        <!-- 1. شاشة الدخول -->
+        <div class="page active" id="page-welcome">
+            <p style="font-size: 1.2rem; margin-bottom: 30px;">
+                مع انو ماف حاجة حتكون بالجد قدر اليوم دا بس أنا بتمنى انها تكون ولو سبب بسيط في ابتسامتك 🌚❤️
+            </p>
+            <button class="btn" onclick="nextPage('page-greeting')">وَرِح</button>
+        </div>
+
+        <!-- 2. الصفحة الأولى -->
+        <div class="page" id="page-greeting">
+            <h1>كل سنة وأنتِ طيبة يا رب!</h1>
+            <p>
+                اول حاجة كلل سنة وانتي طييبة ياارب يخخ والسنة الجاية كللل امانييك وأحلامك محققة يااارب وسنة مليانة سعادة ولحظات جميلة وأيام لطيفة وخفيفة عليك يارب ❤️
+            </p>
+            <div style="margin-top: 30px;">
+                <button class="btn btn-disabled">آميين</button>
+                <button class="btn" onclick="nextPage('page-letter')">آميين بي وجودك</button>
+            </div>
+        </div>
+
+        <!-- 3. صفحة الظرف والرسالة -->
+        <div class="page" id="page-letter">
+            <h2>رسالة خاصة لكِ ✨</h2>
+            <div class="envelope-container" id="envelope" onclick="openEnvelope()">
+                <div class="envelope-flap"></div>
+                <div style="position: absolute; bottom: 40px; width: 100%; text-align: center; color: white; font-weight: bold;">اضغطي لفتح الظرف 💌</div>
+            </div>
+            <div class="letter-content" id="letterContent">
+                عزيزتي دينا<br><br>
+                اليكِ لأنك هكذا أنتِ امرأةٌ كلما دنوتُ من معناها ابتعدت اللغةُ عن قدرتي، وكلما هممتُ أن أصفها وجدتُ الوصفَ واقفًا على عتبة جمالها كغريبٍ لا يعرف بأيّ بدايةٍ يستأذن.<br><br>
+                أراكِ فأشتهي للكلمات أصابع، وللحروف كفوفًا صغيرةً تمتدّ إليكِ، تمسح على روحكِ برفق، وتتسلّل إلى مواضعكِ التي لا يبلغها أحد، ثم تعود إليّ وفيها شيءٌ من عطركِ، وشيءٌ من دفء وجودكِ.<br><br>
+                فما عاد لي من الكتابة غرض سواكِ، ولا عاد للنص عندي معنى إن لم ينتهِ إليكِ: كأنّ كلّ حرفٍ كتبه يخرج منّي وهو يعرف وجهته، يمرّ بالورق قليلًا ثم يرفع رأسه باحثًا عنكِ، حتى صرتُ أخشى أن تقرئي يومًا نصاً لي فلا تجدي نفسكِ فيه، فاقول: خانتني اللغة هذه المرّة.<br><br>
+                ولأن يدي لا تستطيع أن تضمّ روحكِ، وعيني لا تستطيع أن تحتفظ بكِ حين تغيبين، وصوتي، مهما قال، يبقى أقلّ من هذا الفيض الذي يزدحم في داخلي: لذلك أكتب.<br><br>
+                أضع يدي على الحرف كأنني أضعها علي باب بيتٍ مؤمنٌ انكِ خلفه، وأمضي في الجملة طويلًا لعلّي أصل.<br><br>
+                وكلما فرغتُ من نصٍّ عنكِ نظرت إليه بشيءٍ من الخيبة؛ لقد قلتُ كثيرًا، ومع ذلك أشعر أنّني لم ألمس سوى طرفكِ، وأنّ في داخلي منكِ بلادًا لم تصلها الخرائط بعد.<br><br>
+                فكلٌ عامٍ وأنتِ أجمل ما في الأعوام.<br><br>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="btn" onclick="nextPage('page-memories')">التالي ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. صفحة الذكريات والصور -->
+        <div class="page" id="page-memories">
+            <h2>ذكرياتنا الجميلة 🌸</h2>
+            <div class="gallery">
+                <div class="photo-card">
+                    <img src="Photo1.JPG" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=400';" alt="ذكرى جميلة 1">
+                </div>
+                <div class="photo-card">
+                    <img src="Photo2.JPG" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400';" alt="ذكرى جميلة 2">
+                </div>
+                <div class="photo-card">
+                    <img src="Photo3.JPG" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?q=80&w=400';" alt="ذكرى جميلة 3">
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-size: 1rem;">
+                يمكن الدنيا ما كانت كريمة علينا عشان نتلاقى كتير بس كانت كفاية انها تخلق لي واحدة من احلا الذكريات ❤️
+            </p>
+            <button class="btn" onclick="nextPage('page-cake')">التالي 🎂</button>
+        </div>
+
+        <!-- 5. صفحة الكيكة والشموع -->
+        <div class="page" id="page-cake">
+            <h2>وقت الكيكة! 🎂</h2>
+            <div class="cake-box">
+                <div class="candle">
+                    <div class="flame" id="candleFlame"></div>
+                </div>
+            </div>
+            <p id="wishText" style="font-weight: bold; color: #db7093;">ما تنسي تتمني أمنية 🌚</p>
+            <button class="btn" id="blowBtn" onclick="blowCandle()">اطفي الشمعة 🕯️</button>
+            <div id="nextAfterCake" style="display: none; margin-top: 20px;">
+                <button class="btn" onclick="nextPage('page-outro')">الختام 💖</button>
+            </div>
+        </div>
+
+        <!-- 6. صفحة الختام -->
+        <div class="page" id="page-outro">
+            <h2>الختام 🌟</h2>
+            <p>
+                في يومك ميلادك أستطيع ان ارى بوضوح ان الفرح قد عم المكان وامتلأ العالم حولي بشئٍ من الجمال وكانّه صار في كل عام منذ ذلك اليوم يولد منك، فيسلب الصباح نوره من وجهكِ والهواء نقاءه عطركِ.<br><br>
+                فنتمنى جميعاً ان يبقى عيد ميلادك للابد<br>
+                واتمنى أنا فقط ان تتحقق كل أمنياتك وأحلامك حتى يعوضك بالقليل من ما منحني له ميلادك ❤️
+            </p>
+            <p style="font-size: 1.3rem; margin-top: 20px;">🎉 كل عام وأنتِ بخير 🎉</p>
+        </div>
+
+    </div>
+
+    <script>
+        // وظيفة آمنة للانتقال الفوري والمؤكد بين الصفحات
+        function nextPage(targetId) {
+            // 1. محاولة تشغيل الأغنية بأسلوب لا يعطل واجهة المستخدم
+            try {
+                var audio = document.getElementById('bgMusic');
+                if (audio && audio.paused) {
+                    audio.play().catch(function(e) {
+                        console.log("Audio waiting for user interaction:", e);
+                    });
+                }
+            } catch (err) {
+                console.log("Audio error suppressed:", err);
+            }
+
+            // 2. إخفاء جميع الصفحات المفتوحة
+            var allPages = document.querySelectorAll('.page');
+            for (var i = 0; i < allPages.length; i++) {
+                allPages[i].classList.remove('active');
+                allPages[i].style.display = 'none';
+            }
+
+            // 3. إظهار الصفحة المستهدفة بشكل فوري
+            var targetPage = document.getElementById(targetId);
+            if (targetPage) {
+                targetPage.style.display = 'block';
+                // استخدام setTimeout صغير لضمان تفعيل كلاس الأنميشن بسلاسة
+                setTimeout(function() {
+                    targetPage.classList.add('active');
+                }, 10);
+            }
+        }
+
+        // فتح الظرف والرسالة
+        function openEnvelope() {
+            var env = document.getElementById('envelope');
+            if (env) {
+                env.classList.add('open');
+                setTimeout(function() {
+                    env.style.display = 'none';
+                    var content = document.getElementById('letterContent');
+                    if (content) content.style.display = 'block';
+                }, 600);
+            }
+        }
+
+        // إطفا الشمعة وإطلاق confetti
+        function blowCandle() {
+            var flame = document.getElementById('candleFlame');
+            if (flame) flame.classList.add('off');
+
+            var wishText = document.getElementById('wishText');
+            if (wishText) wishText.innerHTML = "تم إطفاء الشمعة! الله يحقق كل أمنياتك ✨🎇";
+
+            var blowBtn = document.getElementById('blowBtn');
+            if (blowBtn) blowBtn.style.display = 'none';
+
+            var nextAfterCake = document.getElementById('nextAfterCake');
+            if (nextAfterCake) nextAfterCake.style.display = 'block';
+
+            // إطلاق المفرقعات والقصاصات
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
